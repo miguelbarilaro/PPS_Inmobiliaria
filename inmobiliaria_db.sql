@@ -4,7 +4,7 @@ use inmobiliaria_db;
 
 create table Categorias (
     id_categoria int auto_increment primary key,
-    categoria varchar(100)
+    nombre varchar(100)
 );
 
 create table Autorizadas (
@@ -78,13 +78,22 @@ create table Personas (
     foreign key (id_direccion) references Direcciones (id_direccion)
 );
 
+create table Roles (
+    id_rol int auto_increment primary key,
+    nombre_rol varchar(100)
+);
+
 create table Usuarios (
     id_usuario int auto_increment primary key,
     email varchar(100),
     contrasena varchar(100),
     id_persona int,
+    id_rol int,
+    foreign key (id_rol) references Roles (id_rol),
     foreign key (id_persona) references Personas (id_persona)
 );
+
+
 
 create table Clientes (
     id_cliente int auto_increment primary key,

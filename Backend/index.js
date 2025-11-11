@@ -1,13 +1,13 @@
-const express = require ("express")
-const mysql = require ("mysql2")
-const cors = require ("cors")
-
-const app = express()
+const express = require("express");
+const mysql = require("mysql2");
+const cors = require("cors");
+const { connection } = require("./Config/database");
+const app = express();
 
 //Habilita CORS
-app.use(cors())
+app.use(cors());
 
-app.use(express.json())
+app.use(express.json()); // Para procesar JSON en las solicitudes
 // Routers
 const ambientesRouter = require('./Routers/AmbientesRouter');
 const autorizadasRouter = require('./Routers/AutorizadasRouter');
@@ -50,12 +50,32 @@ app.use('/api', tipoinmueblesRouter);
 app.use('/api', usuariosRouter);
 app.use('/api', rolesRouter);
 
+// Ruta para el login
+app.post("/api/login", (req, res) => {
+  const { username, password } = req.body;
 
+  // Consulta a la base de datos para verificar el usuario
+  const query = "SELECT * FROM usuarios WHERE username = ? AND password = ?";
+  connection.query(query, [username, password], (err, results) => {
+    if (err) {
+      console.error("Error al consultar la base de datos:", err);
+      return res.status(500).json({ success: false, message: "Error interno del servidor" });
+    }
 
-app.get("/", (req,res) => {
-    res.send("API de la inmobiliaria")
-})
+    if (results.length > 0) {
+      // Usuario encontrado
+      res.json({ success: true, message: "Login exitoso" });
+    } else {
+      // Usuario no encontrado
+      res.json({ success: false, message: "Credenciales incorrectas" });
+    }
+  });
+});
+
+app.get("/", (req, res) => {
+  res.send("API de la inmobiliaria");
+});
 
 app.listen(8000, () => {
-    console.log("Servidor corriendo en el puerto 8000")
-})
+  console.log("Servidor corriendo en http://localhost:8000");
+});

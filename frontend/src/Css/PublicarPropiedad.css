@@ -1,0 +1,84 @@
+.publicar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f4ff, #dfe9ff);
+    font-family: "Poppins", sans-serif;
+    padding: 40px;
+  }
+  
+  .publicar-container h1 {
+    margin-bottom: 30px;
+    color: #1d1d1f;
+    text-align: center;
+    font-size: 2rem;
+  }
+  
+  .publicar-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Inputs, textareas y selects uniformes */
+  .publicar-container input,
+  .publicar-container textarea,
+  .publicar-container select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+    resize: none;
+  }
+  
+  .publicar-container textarea {
+    height: 100px;
+  }
+  
+  .publicar-container input:focus,
+  .publicar-container textarea:focus,
+  .publicar-container select:focus {
+    border-color: #4f7cff;
+    box-shadow: 0 0 8px rgba(79, 124, 255, 0.4);
+    outline: none;
+    background-color: #fff;
+  }
+  
+  .publicar-container select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #4f7cff 50%),
+      linear-gradient(135deg, #4f7cff 50%, transparent 50%);
+    background-position: calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
+  
+  /* Botón */
+  .publicar-container button {
+    background-color: #4f7cff;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .publicar-container button:hover {
+    background-color: #365edc;
+  }
+  

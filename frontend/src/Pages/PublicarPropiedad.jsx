@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+
+
 const PublicarPropiedad = () => {
   const [formData, setFormData] = useState({
     titulo: "",

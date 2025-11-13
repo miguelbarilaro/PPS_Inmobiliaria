@@ -1,4 +1,5 @@
-export const ENDPOINTS = 'http://localhost:8000'
+// El backend monta los routers bajo '/api' en Backend/index.js
+export const ENDPOINTS = 'http://localhost:8000/api'
 
 export const URL_USUARIOS_LIST = '/usuarios'; // GET
 export const URL_USUARIO = '/usuarios'; // POST
@@ -75,3 +76,7 @@ export const URL_AUTORIZADA_ID = (id) => `/autorizadas/${id}`; // GET, PUT, DELE
 export const URL_AMBIENTES_LIST = '/ambientes'; // GET
 export const URL_AMBIENTE = '/ambientes'; // POST
 export const URL_AMBIENTE_ID = (id) => `/ambientes/${id}`; // GET, PUT, DELETE
+
+export const URL_PROPIEDADES_LIST = '/propiedades'; // GET
+export const URL_PROPIEDAD = '/propiedades'; // POST
+export const URL_PROPIEDAD_ID = (id) => `/propiedades/${id}`; // GET, PUT, DELETE

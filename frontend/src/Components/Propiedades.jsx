@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ENDPOINTS, URL_PROPIEDADES_LIST, URL_PROPIEDAD, URL_PROPIEDAD_ID } from '../Endpoints/endpoint';
 
 const Propiedades = () => {
     const [propiedades, setPropiedades] = useState([]);
@@ -10,21 +11,21 @@ const Propiedades = () => {
 
     // Fetch all propiedades
     useEffect(() => {
-        axios.get('/propiedades')
+        axios.get(ENDPOINTS + URL_PROPIEDADES_LIST)
             .then(response => setPropiedades(response.data))
             .catch(error => console.error('Error fetching propiedades:', error));
     }, []);
 
     // Fetch a single propiedad
     const fetchPropiedad = (id) => {
-        axios.get(`/propiedades/${id}`)
+        axios.get(ENDPOINTS + URL_PROPIEDAD_ID(id))
             .then(response => setSelectedPropiedad(response.data))
             .catch(error => console.error('Error fetching propiedad:', error));
     };
 
     // Create a new propiedad
     const createPropiedad = () => {
-        axios.post('/propiedades', { propiedad: newPropiedad })
+        axios.post(ENDPOINTS + URL_PROPIEDAD, { propiedad: newPropiedad })
             .then(response => {
                 setPropiedades([...propiedades, { id_propiedad: response.data.id, propiedad: newPropiedad }]);
                 setNewPropiedad('');
@@ -34,7 +35,7 @@ const Propiedades = () => {
 
     // Edit an existing propiedad
     const updatePropiedad = () => {
-        axios.put(`/propiedades/${editPropiedad.id}`, { propiedad: editPropiedad.propiedad })
+        axios.put(ENDPOINTS + URL_PROPIEDAD_ID(editPropiedad.id), { propiedad: editPropiedad.propiedad })
             .then(() => {
                 setPropiedades(propiedades.map(p => 
                     p.id_propiedad === editPropiedad.id ? { ...p, propiedad: editPropiedad.propiedad } : p
@@ -46,27 +47,31 @@ const Propiedades = () => {
 
     // Delete a propiedad
     const deletePropiedad = (id) => {
-        axios.delete(`/propiedades/${id}`)
+        axios.delete(ENDPOINTS + URL_PROPIEDAD_ID(id))
             .then(() => setPropiedades(propiedades.filter(p => p.id_propiedad !== id)))
             .catch(error => console.error('Error deleting propiedad:', error));
     };
 
     return (
-        <div></div>
+        <div>
             <h1>Propiedades</h1>
             <ul>
-                {propiedades.map(p => (
-                    <li key={p.id_propiedad}>
-                        {p.propiedad}
-                        <button onClick={() => fetchPropiedad(p.id_propiedad)}>View</button>
-                        <button onClick={() => setEditPropiedad({ id: p.id_propiedad, propiedad: p.propiedad })}>Edit</button>
-                        <button onClick={() => deletePropiedad(p.id_propiedad)}>Delete</button>
-                    </li>
-                ))}
+                {propiedades && propiedades.length > 0 ? (
+                    propiedades.map(p => (
+                        <li key={p.id_propiedad}>
+                            {p.propiedad}
+                            <button onClick={() => fetchPropiedad(p.id_propiedad)}>View</button>
+                            <button onClick={() => setEditPropiedad({ id: p.id_propiedad, propiedad: p.propiedad })}>Edit</button>
+                            <button onClick={() => deletePropiedad(p.id_propiedad)}>Delete</button>
+                        </li>
+                    ))
+                ) : (
+                    <li>No hay propiedades disponibles</li>
+                )}
             </ul>
 
             {selectedPropiedad && (
-                <div></div>
+                <div>
                     <h2>Selected Propiedad</h2>
                     <p>{selectedPropiedad.propiedad}</p>
                 </div>
@@ -84,7 +89,7 @@ const Propiedades = () => {
             </div>
 
             {editPropiedad.id && (
-                <div></div>
+                <div>
                     <h2>Edit Propiedad</h2>
                     <input 
                         type="text" 

@@ -74,6 +74,11 @@ const crearInmueble = (req, res) => {
         id_estacionamiento, id_direccion, id_cliente 
     } = req.body;
     
+    // Validar campos requeridos
+    if (!titulo || !descripcion) {
+        return res.status(400).json({ message: 'Título y descripción son requeridos' });
+    }
+    
     const query = `
         INSERT INTO Inmuebles (
             titulo, descripcion, pileta, terraza,
@@ -84,14 +89,23 @@ const crearInmueble = (req, res) => {
     `;
     
     connection.query(query, [
-        titulo, descripcion, pileta, terraza,
-        id_categoria, id_autorizada, id_tipo_inmueble,
-        id_ambiente, id_dormitorio, id_condicion,
-        id_estacionamiento, id_direccion, id_cliente
+        titulo, 
+        descripcion, 
+        pileta ? (typeof pileta === 'boolean' ? 'sí' : pileta) : 'no',
+        terraza ? (typeof terraza === 'boolean' ? 'sí' : terraza) : 'no',
+        id_categoria || null,
+        id_autorizada || null,
+        id_tipo_inmueble || null,
+        id_ambiente || null,
+        id_dormitorio || null,
+        id_condicion || null,
+        id_estacionamiento || null,
+        id_direccion || null,
+        id_cliente || null
     ], (error, results) => {
         if (error) {
             console.error('Error al crear el inmueble:', error);
-            return res.status(500).json({ message: 'Error al crear el inmueble' });
+            return res.status(500).json({ message: 'Error al crear el inmueble', error: error.message });
         }
         res.status(201).json({ 
             id: results.insertId,

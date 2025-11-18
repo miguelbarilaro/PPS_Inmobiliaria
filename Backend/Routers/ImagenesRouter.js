@@ -1,12 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const { mostrarImagenes, mostrarImagen, crearImagen, editarImagen, eliminarImagen } = require('../Controllers/Imagenes');
+const {
+  mostrarImagenes,
+  mostrarImagen,
+  crearImagen,
+  eliminarImagen,
+  obtenerImagenesPorPublicacion
+} = require("../Controllers/Imagenes");
 
-router.get('/imagenes', mostrarImagenes);
-router.get('/imagenes/:id', mostrarImagen);
-router.post('/imagenes', crearImagen);
-router.put('/imagenes/:id', editarImagen);
-router.delete('/imagenes/:id', eliminarImagen);
+// Rutas normales
+router.get("/imagenes", mostrarImagenes);
+router.get("/imagenes/:id", mostrarImagen);
+router.post("/imagenes", crearImagen);
+router.delete("/imagenes/:id", eliminarImagen);
+
+// RUTA NUEVA: obtener fotos por publicación
+router.get("/publicaciones/:id/imagenes", obtenerImagenesPorPublicacion);
 
 module.exports = router;

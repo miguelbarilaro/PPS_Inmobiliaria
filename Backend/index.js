@@ -1,14 +1,45 @@
 const express = require("express");
-const mysql = require("mysql2");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
 const { connection } = require("./Config/database");
+const multer = require("multer");
+const path = require("path");
+
 const app = express();
 
-//Habilita CORS
+// Middlewares
 app.use(cors());
+app.use(express.json());
 
-app.use(express.json()); // Para procesar JSON en las solicitudes
-// Routers
+// ----------------------
+//   MULTER CONFIG
+// ----------------------
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "uploads"));
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, Date.now() + "_" + Math.round(Math.random() * 9999) + ext);
+  }
+});
+const upload = multer({ storage });
+
+// Ruta para subir imágenes
+app.post("/api/upload", upload.array("imagenes", 10), (req, res) => {
+  const files = req.files.map(f => ({
+    nombre: f.filename,
+    url: `http://localhost:8000/uploads/${f.filename}`,
+  }));
+  res.json({ success: true, files });
+});
+
+// Hacer pública la carpeta uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// ----------------------
+//    ROUTERS
+// ----------------------
 const ambientesRouter = require('./Routers/AmbientesRouter');
 const autorizadasRouter = require('./Routers/AutorizadasRouter');
 const categoriasRouter = require('./Routers/CategoriasRouter');
@@ -29,7 +60,7 @@ const tipoinmueblesRouter = require('./Routers/TipoinmueblesRouter');
 const usuariosRouter = require('./Routers/UsuariosRouter');
 const rolesRouter = require('./Routers/RolesRouter');
 
-// Montar routers bajo /api
+// Montar routers (SOLO UNA VEZ)
 app.use('/api', ambientesRouter);
 app.use('/api', autorizadasRouter);
 app.use('/api', categoriasRouter);
@@ -50,32 +81,54 @@ app.use('/api', tipoinmueblesRouter);
 app.use('/api', usuariosRouter);
 app.use('/api', rolesRouter);
 
-// Ruta para el login
+// ----------------------
+//    LOGIN
+// ----------------------
 app.post("/api/login", (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  // Consulta a la base de datos para verificar el usuario
-  const query = "SELECT * FROM usuarios WHERE username = ? AND password = ?";
-  connection.query(query, [username, password], (err, results) => {
-    if (err) {
-      console.error("Error al consultar la base de datos:", err);
-      return res.status(500).json({ success: false, message: "Error interno del servidor" });
+  const query = `
+    SELECT u.*, r.nombre_rol
+    FROM Usuarios u
+    LEFT JOIN Roles r ON u.id_rol = r.id_rol
+    WHERE u.email = ?
+  `;
+
+  connection.query(query, [email], async (err, results) => {
+    if (err) return res.status(500).json({ success: false, message: "Error interno" });
+
+    if (results.length === 0) {
+      return res.json({ success: false, message: "Usuario no encontrado" });
     }
 
-    if (results.length > 0) {
-      // Usuario encontrado
-      res.json({ success: true, message: "Login exitoso" });
-    } else {
-      // Usuario no encontrado
-      res.json({ success: false, message: "Credenciales incorrectas" });
+    const user = results[0];
+    const passwordOk = await bcrypt.compare(password, user.contrasena);
+
+    if (!passwordOk) {
+      return res.json({ success: false, message: "Contraseña incorrecta" });
     }
+
+    if (user.nombre_rol !== "admin") {
+      return res.status(403).json({ success: false, message: "No tienes permisos" });
+    }
+
+    res.json({
+      success: true,
+      user: {
+        id_usuario: user.id_usuario,
+        email: user.email,
+        rol: user.nombre_rol
+      }
+    });
   });
 });
 
+// Ruta base
 app.get("/", (req, res) => {
-  res.send("API de la inmobiliaria");
+  res.send("API funcionando ✔");
 });
 
+// Inicializar servidor
 app.listen(8000, () => {
-  console.log("Servidor corriendo en http://localhost:8000");
+  console.log("🚀 API corriendo en http://localhost:8000");
 });

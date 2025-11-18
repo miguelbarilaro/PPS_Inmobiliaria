@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ENDPOINTS, URL_INMUEBLE, URL_CATEGORIAS_LIST, URL_CONDICIONES_LIST, URL_PROVINCIAS_LIST, URL_DEPARTAMENTOS_LIST, URL_MUNICIPIOS_LIST } from '../Endpoints/endpoint';
-
+import "../Css/PublicarPropiedad.css";
+import * as API from "../Endpoints/endpoint";
+import { useNavigate } from "react-router-dom";
 
 const PublicarPropiedad = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     titulo: "",
     descripcion: "",
@@ -13,6 +16,7 @@ const PublicarPropiedad = () => {
     municipio: "",
     condicion: "",
     categoria: "",
+    imagenes: []
   });
 
   const [categorias, setCategorias] = useState([]);
@@ -22,125 +26,161 @@ const PublicarPropiedad = () => {
   const [municipios, setMunicipios] = useState([]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const name = e.target.name;
+    let value = e.target.value;
+
+    if (name === "imagenes") {
+      setFormData({ ...formData, imagenes: e.target.files });
+      return;
+    }
+
+    const numericFields = ["provincia", "municipio", "categoria", "condicion", "ambientes", "dormitorios", "precio"];
+    if (numericFields.includes(name)) value = Number(value);
+
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Map formData to the fields expected by crearInmueble in Backend/Controllers/Inmuebles.js
-    const payload = {
-      titulo: formData.titulo,
-      descripcion: formData.descripcion,
-      pileta: false,
-      terraza: false,
-      id_categoria: formData.categoria ? Number(formData.categoria) : null,
-      id_autorizada: null,
-      id_tipo_inmueble: null,
-      id_ambiente: null,
-      id_dormitorio: null,
-      id_condicion: formData.condicion ? Number(formData.condicion) : null,
-      id_estacionamiento: null,
-      id_direccion: null,
-      id_cliente: null,
-    };
-
-    fetch(ENDPOINTS + URL_INMUEBLE, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error ${response.status}: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        alert("✅ Propiedad publicada exitosamente (ID: " + data.id + ")");
-        console.log("Respuesta del servidor:", data);
-        // Limpiar el formulario
-        setFormData({
-          titulo: "",
-          descripcion: "",
-          precio: "",
-          ambientes: "",
-          dormitorios: "",
-          provincia: "",
-          municipio: "",
-          condicion: "",
-          categoria: "",
-        });
-      })
-      .catch((error) => {
-        alert("❌ Error al publicar: " + error.message);
-        console.error("Error al enviar los datos:", error);
+    try {
+      // 0 — Crear dirección
+      const resDir = await fetch(API.ENDPOINTS + "/api/direcciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_municipio: formData.municipio,
+          calle: formData.titulo,
+          numero: "0",
+          ubicacion: "",
+          observaciones: ""
+        })
       });
+
+      const direccion = await resDir.json();
+      const idDireccion = direccion.id;
+
+      // 1 — Crear inmueble
+      const resInm = await fetch(API.ENDPOINTS + API.URL_INMUEBLE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          titulo: formData.titulo,
+          descripcion: formData.descripcion,
+          pileta: false,
+          terraza: false,
+          id_categoria: Number(formData.categoria),
+          id_condicion: Number(formData.condicion),
+          id_direccion: idDireccion
+        })
+      });
+
+      const inmueble = await resInm.json();
+
+      // 2 — Crear publicación
+      const resPub = await fetch(API.ENDPOINTS + API.URL_PUBLICACION, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          precio: formData.precio,
+          titulo: formData.titulo,
+          servicios: "",
+          id_inmueble: inmueble.id
+        })
+      });
+
+      const publicacion = await resPub.json();
+      const idPub = publicacion.id_publicacion;
+
+      // 3 — Subir imágenes
+      if (formData.imagenes.length > 0) {
+        const formImg = new FormData();
+        for (let img of formData.imagenes) formImg.append("imagenes", img);
+
+        const uploadRes = await fetch(API.ENDPOINTS + "/api/upload", {
+          method: "POST",
+          body: formImg
+        });
+
+        const uploaded = await uploadRes.json();
+
+        let orden = 1;
+        for (let file of uploaded.files) {
+          await fetch(API.ENDPOINTS + "/api/imagenes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              nombre: file.nombre,
+              url: file.url,
+              orden: orden++,
+              id_publicacion: idPub
+            })
+          });
+        }
+      }
+
+      alert("Propiedad cargada correctamente ✔");
+
+    } catch (err) {
+      console.error(err);
+      alert("Error al cargar propiedad.");
+    }
   };
 
   useEffect(() => {
-    // cargar listas necesarias para selects
-    fetch(ENDPOINTS + URL_CATEGORIAS_LIST).then(r => r.json()).then(setCategorias).catch(err => console.error(err));
-    fetch(ENDPOINTS + URL_CONDICIONES_LIST).then(r => r.json()).then(setCondiciones).catch(err => console.error(err));
-    fetch(ENDPOINTS + URL_PROVINCIAS_LIST).then(r => r.json()).then(setProvincias).catch(err => console.error(err));
-    fetch(ENDPOINTS + URL_DEPARTAMENTOS_LIST).then(r => r.json()).then(setDepartamentos).catch(err => console.error(err));
-    fetch(ENDPOINTS + URL_MUNICIPIOS_LIST).then(r => r.json()).then(setMunicipios).catch(err => console.error(err));
+    fetch(API.ENDPOINTS + API.URL_CATEGORIAS_LIST).then(r => r.json()).then(setCategorias);
+    fetch(API.ENDPOINTS + API.URL_CONDICIONES_LIST).then(r => r.json()).then(setCondiciones);
+    fetch(API.ENDPOINTS + API.URL_PROVINCIAS_LIST).then(r => r.json()).then(setProvincias);
+    fetch(API.ENDPOINTS + API.URL_DEPARTAMENTOS_LIST).then(r => r.json()).then(setDepartamentos);
+    fetch(API.ENDPOINTS + API.URL_MUNICIPIOS_LIST).then(r => r.json()).then(setMunicipios);
   }, []);
 
+  const municipiosByProv = () => {
+    if (!formData.provincia) return [];
+    const deptIds = departamentos
+      .filter(d => Number(d.id_provincia) === Number(formData.provincia))
+      .map(d => d.id_departamento);
+    return municipios.filter(m => deptIds.includes(m.id_departamento));
+  };
+
   return (
-    <div>
-      <h1>Publicar Propiedad</h1>
-      <form onSubmit={handleSubmit}>
-        <input name="titulo" placeholder="Título" onChange={handleChange} required />
-        <textarea name="descripcion" placeholder="Descripción" onChange={handleChange} required />
-        <input name="precio" placeholder="Precio" type="number" onChange={handleChange} required />
-        <input name="ambientes" placeholder="Ambientes" type="number" onChange={handleChange} required />
-        <input name="dormitorios" placeholder="Dormitorios" type="number" onChange={handleChange} required />
-        <label>
-          Categoría
+    <div className="publicar-page">
+
+      <button className="btn-volver" onClick={() => navigate(-1)}>← Volver</button>
+
+      <div className="publicar-container">
+        <h1>Publicar Propiedad</h1>
+
+        <form className="publicar-form" onSubmit={handleSubmit}>
+          <input name="titulo" placeholder="Título" onChange={handleChange} required />
+          <textarea name="descripcion" placeholder="Descripción" onChange={handleChange} required></textarea>
+          <input name="precio" type="number" placeholder="Precio" onChange={handleChange} required />
+
           <select name="categoria" value={formData.categoria} onChange={handleChange} required>
             <option value="">Seleccionar categoría</option>
-            {categorias.map(cat => (
-              <option key={cat.id_categoria} value={cat.id_categoria}>{cat.nombre}</option>
-            ))}
+            {categorias.map(c => <option key={c.id_categoria} value={c.id_categoria}>{c.nombre}</option>)}
           </select>
-        </label>
 
-        <label>
-          Provincia
           <select name="provincia" value={formData.provincia} onChange={handleChange} required>
             <option value="">Seleccionar provincia</option>
-            {provincias.map(p => (
-              <option key={p.id_provincia} value={p.id_provincia}>{p.nombre}</option>
-            ))}
+            {provincias.map(p => <option key={p.id_provincia} value={p.id_provincia}>{p.nombre}</option>)}
           </select>
-        </label>
 
-        <label>
-          Municipio
-          <select name="municipio" value={formData.municipio} onChange={handleChange} required disabled={!formData.provincia}>
+          <select name="municipio" value={formData.municipio} disabled={!formData.provincia} onChange={handleChange} required>
             <option value="">Seleccionar municipio</option>
-            {(() => {
-              const deptIds = departamentos.filter(d => Number(d.id_provincia) === Number(formData.provincia)).map(d => d.id_departamento);
-              const visibles = municipios.filter(m => deptIds.includes(m.id_departamento));
-              return visibles.map(m => (
-                <option key={m.id_municipio} value={m.id_municipio}>{m.nombre}</option>
-              ));
-            })()}
+            {municipiosByProv().map(m => <option key={m.id_municipio} value={m.id_municipio}>{m.nombre}</option>)}
           </select>
-        </label>
 
-        <label>
-          Condición
           <select name="condicion" value={formData.condicion} onChange={handleChange} required>
             <option value="">Seleccionar condición</option>
-            {condiciones.map(c => (
-              <option key={c.id_condicion} value={c.id_condicion}>{c.estado}</option>
-            ))}
+            {condiciones.map(c => <option key={c.id_condicion} value={c.id_condicion}>{c.estado}</option>)}
           </select>
-        </label>
-        <button type="submit">Enviar</button>
-      </form>
+
+          <input type="file" name="imagenes" multiple accept="image/*" onChange={handleChange} />
+
+          <button className="btn-enviar" type="submit">Publicar</button>
+        </form>
+      </div>
     </div>
   );
 };

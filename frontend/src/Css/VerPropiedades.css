@@ -1,0 +1,197 @@
+/* ===========================
+   FONDO GENERAL
+=========================== */
+.ver-propiedades-container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px 20px;
+
+    /* Fondo imagen + blur suave */
+    background: url("https://images.unsplash.com/photo-1564013799919-ab600027ffc6") no-repeat center center/cover;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* TÍTULO */
+.ver-propiedades-container h1 {
+    font-size: 2.6rem;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    margin-bottom: 25px;
+}
+
+
+/* ===========================
+   FILTROS (Glassmorphism)
+=========================== */
+.filtros-container {
+    width: 100%;
+    max-width: 1100px;
+
+    background: rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    padding: 20px 25px;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: space-between;
+}
+
+/* Inputs y selects estilizados */
+.filtros-container select,
+.filtros-container button {
+    flex: 1 1 23%;
+    min-width: 190px;
+
+    padding: 12px 15px;
+    border-radius: 14px;
+
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.4);
+
+    font-size: 15px;
+    color: #222;
+    font-weight: 500;
+    outline: none;
+    transition: 0.25s ease;
+}
+
+.filtros-container select:hover {
+    background: rgba(255,255,255,0.65);
+}
+
+.filtros-container select:disabled {
+    background: rgba(200,200,200,0.4);
+    cursor: not-allowed;
+}
+
+/* Botón Buscar */
+.filtros-container button {
+    background: #2d89ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.filtros-container button:hover {
+    background: #1a6ee0;
+    transform: translateY(-2px);
+}
+
+
+/* ===========================
+   GRID DE PROPIEDADES
+=========================== */
+.propiedades-grid {
+    margin-top: 35px;
+    width: 100%;
+    max-width: 1100px;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 28px;
+}
+
+
+/* ===========================
+   CARD (Glass card moderna)
+=========================== */
+.propiedad-card {
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    border-radius: 18px;
+    overflow: hidden;
+
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+
+    transition: 0.25s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.propiedad-card:hover {
+    transform: translateY(-5px);
+}
+
+
+/* Imagen */
+.propiedad-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #ccc;
+}
+
+/* Título */
+.propiedad-card h2 {
+    margin: 15px 18px 8px;
+    font-size: 1.3rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+/* Descripción */
+.propiedad-card .descripcion {
+    margin: 0 18px 15px;
+    font-size: 14px;
+    color: #f0f0f0;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+
+/* Botón Ver más */
+.btn-vermas {
+    margin: 8px 18px 18px;
+    padding: 10px 15px;
+    background: #7cb9ee;
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.25s ease;
+}
+
+.btn-vermas:hover {
+    color: rgb(190, 220, 242);
+    background: #3b6590;
+    transform: translateY(-2px);
+}
+/* 🔥 BOTÓN VOLVER — estilo uniforme en toda la web */
+.btn-volver {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    color: white;
+    font-size: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    z-index: 10;
+  }
+  
+  .btn-volver:hover {
+    background: rgba(255, 255, 255, 0.45);
+    transform: translateY(-2px);
+  }
+  
+  .btn-volver:active {
+    transform: translateY(1px);
+  }
+  

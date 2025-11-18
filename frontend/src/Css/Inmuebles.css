@@ -1,0 +1,94 @@
+/* Fondo general */
+.inmuebles-page {
+    min-height: 100vh;
+    background: #0b0b0b;
+    padding: 40px;
+    color: white;
+    position: relative;
+  }
+  
+  /* Título */
+  .titulo-crud {
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(255,255,255,0.15);
+  }
+  
+  /* Botón VOLVER */
+  .btn-volver-inmuebles {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+  
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+  
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+  
+  .btn-volver-inmuebles:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+  
+  /* Tabla */
+  .tabla-wrapper {
+    margin-bottom: 40px;
+  }
+  
+  .tabla-inmuebles {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  /* Formulario */
+  .form-crud-container {
+    width: 100%;
+    max-width: 900px;
+  
+    background: rgba(255, 255, 255, 0.07);
+    padding: 25px;
+    border-radius: 16px;
+  
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(6px);
+  }
+  
+  .subtitulo-form {
+    font-size: 1.9rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Inputs oscuros */
+  .form-crud input,
+  .form-crud select {
+    background: #1b1b1b !important;
+    border: 1px solid #3a3a3a !important;
+    color: white !important;
+  }
+  
+  .form-crud label {
+    color: #ccc;
+  }
+  
+  /* Botones */
+  .btn-submit-crud {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    width: 100%;
+  }
+  
+  .btn-cancelar {
+    margin-left: 10px;
+    margin-top: 20px;
+  }
+  

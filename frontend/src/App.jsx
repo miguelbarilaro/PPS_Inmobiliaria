@@ -4,6 +4,8 @@ import HomePage from "./Pages/HomePage";
 import PublicarPropiedad from "./Pages/PublicarPropiedad";
 import VerPropiedades from "./Pages/VerPropiedades";
 import Login from "./Pages/Login";
+import AdminDashboard from "./Pages/AdminDashboard";
+
 
 // Componentes CRUD
 import Ambientes from "./Components/Ambientes";
@@ -26,6 +28,7 @@ import Publicaciones from "./Components/Publicaciones";
 import Roles from "./Components/Roles";
 import Tipoinmuebles from "./Components/Tipoinmuebles";
 import Usuarios from "./Components/Usuarios";
+import PropiedadDetalle from "./Pages/PropiedadDetalle";
 
 const App = () => {
   return (
@@ -36,8 +39,14 @@ const App = () => {
         <Route path="/publicar" element={<PublicarPropiedad />} />
         <Route path="/propiedades" element={<VerPropiedades />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/propiedad/:id" element={<PropiedadDetalle />} />
+
+
+        <Route path="/admin" element={<AdminDashboard />} />
+
 
         {/* Rutas administrativas / CRUD */}
+
         <Route path="/admin/ambientes" element={<Ambientes />} />
         <Route path="/admin/autorizadas" element={<Autorizadas />} />
         <Route path="/admin/categorias" element={<Categorias />} />

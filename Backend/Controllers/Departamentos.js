@@ -2,8 +2,16 @@ const { connection } = require('../Config/database');
 
 // Obtener todos los departamentos
 const mostrarDepartamentos = (req, res) => {
-    const query = 'SELECT d.*, p.nombre as nombre_provincia FROM Departamentos d LEFT JOIN Provincias p ON d.id_provincia = p.id_provincia';
-    
+    const query = `
+        SELECT 
+            d.id_departamento,
+            d.nombre,
+            d.id_provincia,
+            p.nombre AS nombre_provincia
+        FROM Departamentos d
+        LEFT JOIN Provincias p ON d.id_provincia = p.id_provincia
+    `;
+
     connection.query(query, (error, results) => {
         if (error) {
             console.error('Error al obtener los departamentos:', error);
@@ -16,8 +24,18 @@ const mostrarDepartamentos = (req, res) => {
 // Obtener un departamento por ID
 const mostrarDepartamento = (req, res) => {
     const id = req.params.id;
-    const query = 'SELECT d.*, p.nombre as nombre_provincia FROM Departamentos d LEFT JOIN Provincias p ON d.id_provincia = p.id_provincia WHERE d.id_departamento = ?';
-    
+
+    const query = `
+        SELECT 
+            d.id_departamento,
+            d.nombre,
+            d.id_provincia,
+            p.nombre AS nombre_provincia
+        FROM Departamentos d
+        LEFT JOIN Provincias p ON d.id_provincia = p.id_provincia
+        WHERE d.id_departamento = ?
+    `;
+
     connection.query(query, [id], (error, results) => {
         if (error) {
             console.error('Error al obtener el departamento:', error);
@@ -34,15 +52,15 @@ const mostrarDepartamento = (req, res) => {
 const crearDepartamento = (req, res) => {
     const { nombre, id_provincia } = req.body;
     const query = 'INSERT INTO Departamentos (nombre, id_provincia) VALUES (?, ?)';
-    
+
     connection.query(query, [nombre, id_provincia], (error, results) => {
         if (error) {
             console.error('Error al crear el departamento:', error);
             return res.status(500).json({ message: 'Error al crear el departamento' });
         }
-        res.status(201).json({ 
+        res.status(201).json({
             id: results.insertId,
-            message: 'Departamento creado exitosamente' 
+            message: 'Departamento creado exitosamente'
         });
     });
 };
@@ -51,8 +69,9 @@ const crearDepartamento = (req, res) => {
 const editarDepartamento = (req, res) => {
     const id = req.params.id;
     const { nombre, id_provincia } = req.body;
+
     const query = 'UPDATE Departamentos SET nombre = ?, id_provincia = ? WHERE id_departamento = ?';
-    
+
     connection.query(query, [nombre, id_provincia, id], (error, results) => {
         if (error) {
             console.error('Error al actualizar el departamento:', error);
@@ -68,8 +87,9 @@ const editarDepartamento = (req, res) => {
 // Eliminar un departamento
 const eliminarDepartamento = (req, res) => {
     const id = req.params.id;
+
     const query = 'DELETE FROM Departamentos WHERE id_departamento = ?';
-    
+
     connection.query(query, [id], (error, results) => {
         if (error) {
             console.error('Error al eliminar el departamento:', error);

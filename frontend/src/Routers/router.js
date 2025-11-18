@@ -21,6 +21,7 @@ import Roles from '../Components/Roles'
 import Tipoinmuebles from '../Components/Tipoinmuebles'
 import Usuarios from '../Components/Usuarios'
 
+
 const routes = [
 	{ path: '/', label: 'Inicio' },
 	{ path: '/ambientes', label: 'Ambientes', element: <Ambientes /> },
@@ -43,6 +44,7 @@ const routes = [
 	{ path: '/roles', label: 'Roles', element: <Roles /> },
 	{ path: '/tipoinmuebles', label: 'TipoInmuebles', element: <Tipoinmuebles /> },
 	{ path: '/usuarios', label: 'Usuarios', element: <Usuarios /> }
+	
 ]
 
 function Home() {

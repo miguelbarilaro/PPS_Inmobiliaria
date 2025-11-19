@@ -110,7 +110,6 @@ create table Inmuebles (
     pileta varchar(100),
     terraza varchar(100),
     id_categoria int,
-    id_autorizada int,
     id_tipo_inmueble int,
     id_ambiente int,
     id_dormitorio int,
@@ -119,7 +118,6 @@ create table Inmuebles (
     id_direccion int,
     id_cliente int,
     foreign key (id_categoria) references Categorias (id_categoria),
-    foreign key (id_autorizada) references Autorizadas (id_autorizada),
     foreign key (id_tipo_inmueble) references Tipo_Inmuebles (id_tipo_inmueble),
     foreign key (id_ambiente) references Ambientes (id_ambiente),
     foreign key (id_dormitorio) references Dormitorios (id_dormitorio),
@@ -135,7 +133,9 @@ create table Publicaciones (
     titulo varchar(100),
     servicios varchar(100),
     id_inmueble int,
-    foreign key (id_inmueble) references Inmuebles (id_inmueble)
+    id_autorizada int default 1,
+    foreign key (id_inmueble) references Inmuebles (id_inmueble),
+    foreign key (id_autorizada) references Autorizadas (id_autorizada)
 );
 
 create table Imagenes (

@@ -1,22 +1,21 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { ENDPOINTS, URL_INMUEBLES_LIST, URL_INMUEBLE, URL_INMUEBLE_ID, URL_CATEGORIAS_LIST, URL_AUTORIZADAS_LIST, URL_TIPOINMUEBLES_LIST, URL_AMBIENTES_LIST, URL_DORMITORIOS_LIST, URL_CONDICIONES_LIST, URL_ESTACIONAMIENTOS_LIST, URL_DIRECCIONES_LIST, URL_CLIENTES_LIST } from '../Endpoints/endpoint';
+import { ENDPOINTS, URL_INMUEBLES_LIST, URL_INMUEBLE, URL_INMUEBLE_ID, URL_CATEGORIAS_LIST, URL_TIPOINMUEBLES_LIST, URL_AMBIENTES_LIST, URL_DORMITORIOS_LIST, URL_CONDICIONES_LIST, URL_ESTACIONAMIENTOS_LIST, URL_DIRECCIONES_LIST, URL_CLIENTES_LIST } from '../Endpoints/endpoint';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 const Inmuebles = () => {
   const [datos, setData] = useState([]);
-  const [catalogos, setCatalogos] = useState({ categorias: [], autorizadas: [], tipos: [], ambientes: [], dormitorios: [], condiciones: [], estacionamientos: [], direcciones: [], clientes: [] });
-  const [form, setForm] = useState({ titulo: '', descripcion: '', pileta: '', terraza: '', id_categoria: '', id_autorizada: '', id_tipo_inmueble: '', id_ambiente: '', id_dormitorio: '', id_condicion: '', id_estacionamiento: '', id_direccion: '', id_cliente: '' });
+  const [catalogos, setCatalogos] = useState({ categorias: [], tipos: [], ambientes: [], dormitorios: [], condiciones: [], estacionamientos: [], direcciones: [], clientes: [] });
+  const [form, setForm] = useState({ titulo: '', descripcion: '', pileta: '', terraza: '', id_categoria: '', id_tipo_inmueble: '', id_ambiente: '', id_dormitorio: '', id_condicion: '', id_estacionamiento: '', id_direccion: '', id_cliente: '' });
   const [editId, setEditId] = useState(null);
 
   const getInmuebles = async () => { try { const res = await axios.get(ENDPOINTS + URL_INMUEBLES_LIST); setData(res.data); } catch (error) { console.log('Error inmuebles', error); } };
   const getCatalogos = async () => {
     try {
-      const [c1,c2,c3,c4,c5,c6,c7,c8,c9] = await Promise.all([
+      const [c1,c2,c3,c4,c5,c6,c7,c8] = await Promise.all([
         axios.get(ENDPOINTS + URL_CATEGORIAS_LIST),
-        axios.get(ENDPOINTS + URL_AUTORIZADAS_LIST),
         axios.get(ENDPOINTS + URL_TIPOINMUEBLES_LIST),
         axios.get(ENDPOINTS + URL_AMBIENTES_LIST),
         axios.get(ENDPOINTS + URL_DORMITORIOS_LIST),
@@ -25,17 +24,17 @@ const Inmuebles = () => {
         axios.get(ENDPOINTS + URL_DIRECCIONES_LIST),
         axios.get(ENDPOINTS + URL_CLIENTES_LIST)
       ]);
-      setCatalogos({ categorias: c1.data, autorizadas: c2.data, tipos: c3.data, ambientes: c4.data, dormitorios: c5.data, condiciones: c6.data, estacionamientos: c7.data, direcciones: c8.data, clientes: c9.data });
+      setCatalogos({ categorias: c1.data, tipos: c2.data, ambientes: c3.data, dormitorios: c4.data, condiciones: c5.data, estacionamientos: c6.data, direcciones: c7.data, clientes: c8.data });
     } catch (error) { console.log('Error catalogos', error); }
   };
 
   useEffect(() => { getInmuebles(); getCatalogos(); }, []);
 
-  const handleSubmit = async (e) => { e.preventDefault(); try { if (editId) { await axios.put(ENDPOINTS + URL_INMUEBLE_ID(editId), form); } else { await axios.post(ENDPOINTS + URL_INMUEBLE, form); } setForm({ titulo: '', descripcion: '', pileta: '', terraza: '', id_categoria: '', id_autorizada: '', id_tipo_inmueble: '', id_ambiente: '', id_dormitorio: '', id_condicion: '', id_estacionamiento: '', id_direccion: '', id_cliente: '' }); setEditId(null); getInmuebles(); } catch (error) { console.log('Error al guardar inmueble', error); } };
+  const handleSubmit = async (e) => { e.preventDefault(); try { if (editId) { await axios.put(ENDPOINTS + URL_INMUEBLE_ID(editId), form); } else { await axios.post(ENDPOINTS + URL_INMUEBLE, form); } setForm({ titulo: '', descripcion: '', pileta: '', terraza: '', id_categoria: '', id_tipo_inmueble: '', id_ambiente: '', id_dormitorio: '', id_condicion: '', id_estacionamiento: '', id_direccion: '', id_cliente: '' }); setEditId(null); getInmuebles(); } catch (error) { console.log('Error al guardar inmueble', error); } };
 
   const handleDelete = async (id) => { if (window.confirm('¿Eliminar inmueble?')) { try { await axios.delete(ENDPOINTS + URL_INMUEBLE_ID(id)); getInmuebles(); } catch (error) { console.log('Error', error); } } };
 
-  const handleEdit = (item) => { setForm({ titulo: item.titulo, descripcion: item.descripcion, pileta: item.pileta, terraza: item.terraza, id_categoria: item.id_categoria, id_autorizada: item.id_autorizada, id_tipo_inmueble: item.id_tipo_inmueble, id_ambiente: item.id_ambiente, id_dormitorio: item.id_dormitorio, id_condicion: item.id_condicion, id_estacionamiento: item.id_estacionamiento, id_direccion: item.id_direccion, id_cliente: item.id_cliente }); setEditId(item.id_inmueble); };
+  const handleEdit = (item) => { setForm({ titulo: item.titulo, descripcion: item.descripcion, pileta: item.pileta, terraza: item.terraza, id_categoria: item.id_categoria, id_tipo_inmueble: item.id_tipo_inmueble, id_ambiente: item.id_ambiente, id_dormitorio: item.id_dormitorio, id_condicion: item.id_condicion, id_estacionamiento: item.id_estacionamiento, id_direccion: item.id_direccion, id_cliente: item.id_cliente }); setEditId(item.id_inmueble); };
 
   return (
     <div>
@@ -53,7 +52,6 @@ const Inmuebles = () => {
         <Form.Group><Form.Label>Terraza</Form.Label><Form.Control type="text" value={form.terraza} onChange={(e)=>setForm({...form, terraza: e.target.value})} /></Form.Group>
 
         <Form.Group><Form.Label>Categoría</Form.Label><Form.Control as="select" value={form.id_categoria} onChange={(e)=>setForm({...form, id_categoria: e.target.value})}><option value="">Seleccione</option>{catalogos.categorias.map(c=>(<option key={c.id_categoria} value={c.id_categoria}>{c.nombre}</option>))}</Form.Control></Form.Group>
-        <Form.Group><Form.Label>Autorizada</Form.Label><Form.Control as="select" value={form.id_autorizada} onChange={(e)=>setForm({...form, id_autorizada: e.target.value})}><option value="">Seleccione</option>{catalogos.autorizadas.map(a=>(<option key={a.id_autorizada} value={a.id_autorizada}>{a.autorizada}</option>))}</Form.Control></Form.Group>
         <Form.Group><Form.Label>Tipo de Inmueble</Form.Label><Form.Control as="select" value={form.id_tipo_inmueble} onChange={(e)=>setForm({...form, id_tipo_inmueble: e.target.value})}><option value="">Seleccione</option>{catalogos.tipos.map(t=>(<option key={t.id_tipo_inmueble} value={t.id_tipo_inmueble}>{t.tipo_inmueble}</option>))}</Form.Control></Form.Group>
 
         <Form.Group><Form.Label>Ambiente</Form.Label><Form.Control as="select" value={form.id_ambiente} onChange={(e)=>setForm({...form, id_ambiente: e.target.value})}><option value="">Seleccione</option>{catalogos.ambientes.map(am=>(<option key={am.id_ambiente} value={am.id_ambiente}>{am.numero}</option>))}</Form.Control></Form.Group>
@@ -64,7 +62,7 @@ const Inmuebles = () => {
         <Form.Group><Form.Label>Cliente</Form.Label><Form.Control as="select" value={form.id_cliente} onChange={(e)=>setForm({...form, id_cliente: e.target.value})}><option value="">Seleccione</option>{catalogos.clientes.map(cl=>(<option key={cl.id_cliente} value={cl.id_cliente}>{cl.tipo}</option>))}</Form.Control></Form.Group>
 
         <Button variant="primary" type="submit" style={{ marginTop: 10 }}>{editId ? 'Actualizar' : 'Agregar'}</Button>
-        {editId && (<Button variant="secondary" style={{ marginLeft: 10, marginTop: 10 }} onClick={()=>{setEditId(null); setForm({ titulo: '', descripcion: '', pileta: '', terraza: '', id_categoria: '', id_autorizada: '', id_tipo_inmueble: '', id_ambiente: '', id_dormitorio: '', id_condicion: '', id_estacionamiento: '', id_direccion: '', id_cliente: '' });}}>Cancelar</Button>)}
+        {editId && (<Button variant="secondary" style={{ marginLeft: 10, marginTop: 10 }} onClick={()=>{setEditId(null); setForm({ titulo: '', descripcion: '', pileta: '', terraza: '', id_categoria: '', id_tipo_inmueble: '', id_ambiente: '', id_dormitorio: '', id_condicion: '', id_estacionamiento: '', id_direccion: '', id_cliente: '' });}}>Cancelar</Button>)}
       </Form>
     </div>
   );

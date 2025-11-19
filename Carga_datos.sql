@@ -1,5 +1,8 @@
 use inmobiliaria_db;
 
+INSERT INTO Autorizadas (autorizada) VALUES
+('pendiente'),
+('aprobada');
 
 INSERT INTO Provincias (nombre) VALUES
 ('Buenos Aires'),
@@ -83,3 +86,14 @@ INSERT INTO Categorias (nombre) VALUES
 ('Galpón'),
 ('Oficina'),
 ('Local Comercial');
+
+
+INSERT INTO Roles (nombre_rol) VALUES ('admin');
+
+INSERT INTO Roles (nombre_rol) VALUES ('user');
+
+INSERT INTO `inmobiliaria_db`.`personas` (`id_persona`, `cuil`, `dni`, `fecha_nacimiento`, `edad`) VALUES ('1', '324324', '32425', '34320', '40');
+
+
+INSERT INTO Usuarios (email, contrasena, id_persona, id_rol)
+VALUES ('admin', '$2b$10$xukTawNap8GwwPoWBr3eFu597wUP0GR2xu8ccGboPzikiarSplO6m', 1, 1);

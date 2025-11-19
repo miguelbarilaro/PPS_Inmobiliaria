@@ -48,7 +48,10 @@ export const URL_MUNICIPIO_ID = (id) => `${API}/municipios/${id}`;
 export const URL_INMUEBLES_LIST = `${API}/inmuebles`;
 export const URL_INMUEBLE = `${API}/inmuebles`;
 export const URL_INMUEBLE_ID = (id) => `${API}/inmuebles/${id}`;
-export const URL_INMUEBLES_PUBLICADOS = `${API}/inmuebles-publicados`;
+export const URL_INMUEBLES_PUBLICADOS = `${API}/inmuebles/publicados`;
+export const URL_INMUEBLES_PENDIENTES = `${API}/inmuebles/pendientes`;
+export const URL_INMUEBLE_APROBAR = (id) => `${API}/inmuebles/${id}/aprobar`;
+export const URL_INMUEBLE_RECHAZAR = (id) => `${API}/inmuebles/${id}/rechazar`;
 
 // IMÁGENES
 export const URL_IMAGENES_LIST = `${API}/imagenes`;

@@ -5,6 +5,7 @@ import PublicarPropiedad from "./Pages/PublicarPropiedad";
 import VerPropiedades from "./Pages/VerPropiedades";
 import Login from "./Pages/Login";
 import AdminDashboard from "./Pages/AdminDashboard";
+import RegistrarUsuario from "./Pages/RegistrarUsuario";
 
 
 // Componentes CRUD
@@ -37,6 +38,7 @@ const App = () => {
         {/* Rutas públicas */}
         <Route path="/" element={<HomePage />} />
         <Route path="/publicar" element={<PublicarPropiedad />} />
+        <Route path="/registro" element={<RegistrarUsuario />} />
         <Route path="/propiedades" element={<VerPropiedades />} />
         <Route path="/login" element={<Login />} />
         <Route path="/propiedad/:id" element={<PropiedadDetalle />} />

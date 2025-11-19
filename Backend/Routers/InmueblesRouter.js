@@ -6,8 +6,7 @@ const {
   mostrarInmueble,
   crearInmueble,
   editarInmueble,
-  eliminarInmueble,
-  mostrarInmueblesPublicados
+  eliminarInmueble
 } = require('../Controllers/Inmuebles');
 
 router.get('/inmuebles', mostrarInmuebles);
@@ -15,8 +14,5 @@ router.get('/inmuebles/:id', mostrarInmueble);
 router.post('/inmuebles', crearInmueble);
 router.put('/inmuebles/:id', editarInmueble);
 router.delete('/inmuebles/:id', eliminarInmueble);
-
-// Nueva ruta
-router.get('/inmuebles-publicados', mostrarInmueblesPublicados);
 
 module.exports = router;

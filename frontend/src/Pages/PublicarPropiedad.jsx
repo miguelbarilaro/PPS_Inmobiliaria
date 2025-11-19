@@ -30,7 +30,13 @@ const PublicarPropiedad = () => {
     let value = e.target.value;
 
     if (name === "imagenes") {
-      setFormData({ ...formData, imagenes: e.target.files });
+      // Limitar a máximo 10 imágenes
+      const files = Array.from(e.target.files || []);
+      if (files.length > 10) {
+        alert('Solo puede subir un máximo de 10 imágenes. Se tomarán las primeras 10.');
+      }
+      const selected = files.slice(0, 10);
+      setFormData({ ...formData, imagenes: selected });
       return;
     }
 
@@ -93,9 +99,11 @@ const PublicarPropiedad = () => {
       const idPub = publicacion.id_publicacion;
 
       // 3 — Subir imágenes
-      if (formData.imagenes.length > 0) {
+      if (formData.imagenes && formData.imagenes.length > 0) {
         const formImg = new FormData();
-        for (let img of formData.imagenes) formImg.append("imagenes", img);
+        // Aseguramos como máximo 10
+        const filesToUpload = formData.imagenes.slice(0, 10);
+        for (let img of filesToUpload) formImg.append("imagenes", img);
 
         const uploadRes = await fetch(API.ENDPOINTS + "/api/upload", {
           method: "POST",
@@ -105,7 +113,8 @@ const PublicarPropiedad = () => {
         const uploaded = await uploadRes.json();
 
         let orden = 1;
-        for (let file of uploaded.files) {
+        // `uploaded.files` debe contener los archivos subidos con sus nombres y urls
+        for (let file of (uploaded.files || [])) {
           await fetch(API.ENDPOINTS + "/api/imagenes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -120,6 +129,8 @@ const PublicarPropiedad = () => {
       }
 
       alert("Propiedad cargada correctamente ✔");
+      // Redirigir a HomePage después de publicar
+      navigate("/");
 
     } catch (err) {
       console.error(err);

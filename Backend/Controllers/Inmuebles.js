@@ -8,8 +8,6 @@ const mostrarInmuebles = (req, res) => {
     const query = `
         SELECT i.*, 
 
-               c.nombre AS categoria,
-               a.autorizada,
                ti.tipo_inmueble,
                am.numero AS numero_ambientes,
                d.numero AS numero_dormitorios,
@@ -34,7 +32,7 @@ const mostrarInmuebles = (req, res) => {
 
         FROM Inmuebles i
         LEFT JOIN Categorias c ON i.id_categoria = c.id_categoria
-        LEFT JOIN Autorizadas a ON i.id_autorizada = a.id_autorizada
+        /* no state in Inmuebles - state is tracked in Publicaciones */
         LEFT JOIN Tipo_Inmuebles ti ON i.id_tipo_inmueble = ti.id_tipo_inmueble
         LEFT JOIN Ambientes am ON i.id_ambiente = am.id_ambiente
         LEFT JOIN Dormitorios d ON i.id_dormitorio = d.id_dormitorio
@@ -70,7 +68,6 @@ const mostrarInmueble = (req, res) => {
         SELECT i.*, 
 
                c.nombre AS categoria,
-               a.autorizada,
                ti.tipo_inmueble,
                am.numero AS numero_ambientes,
                d.numero AS numero_dormitorios,
@@ -95,7 +92,6 @@ const mostrarInmueble = (req, res) => {
 
         FROM Inmuebles i
         LEFT JOIN Categorias c ON i.id_categoria = c.id_categoria
-        LEFT JOIN Autorizadas a ON i.id_autorizada = a.id_autorizada
         LEFT JOIN Tipo_Inmuebles ti ON i.id_tipo_inmueble = ti.id_tipo_inmueble
         LEFT JOIN Ambientes am ON i.id_ambiente = am.id_ambiente
         LEFT JOIN Dormitorios d ON i.id_dormitorio = d.id_dormitorio
@@ -131,46 +127,46 @@ const mostrarInmueble = (req, res) => {
 // 📌 CREAR INMUEBLE
 // ---------------------------------------------------
 const crearInmueble = (req, res) => {
-    const { 
-      titulo, descripcion, pileta, terraza, 
-      id_categoria, id_condicion, id_direccion
-    } = req.body;
+        const { 
+            titulo, descripcion, pileta, terraza, 
+            id_categoria, id_condicion, id_direccion
+        } = req.body;
     
-    if (!titulo || !descripcion) {
-      return res.status(400).json({ message: "Título y descripción son requeridos" });
-    }
-  
-    const query = `
-      INSERT INTO Inmuebles (
-        titulo, descripcion, pileta, terraza,
-        id_categoria, id_condicion, id_direccion
-      ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-  
-    connection.query(
-      query,
-      [
-        titulo,
-        descripcion,
-        pileta ? "sí" : "no",
-        terraza ? "sí" : "no",
-        id_categoria || null,
-        id_condicion || null,
-        id_direccion || null
-      ],
-      (error, results) => {
-        if (error) {
-          console.error("❌ Error al crear inmueble:", error);
-          return res.status(500).json({ message: "Error al crear inmueble" });
+        if (!titulo || !descripcion) {
+            return res.status(400).json({ message: "Título y descripción son requeridos" });
         }
   
-        res.status(201).json({
-          id: results.insertId,
-          message: "Inmueble creado exitosamente"
-        });
-      }
-    );
-  };
+        const query = `
+            INSERT INTO Inmuebles (
+                titulo, descripcion, pileta, terraza,
+                id_categoria, id_condicion, id_direccion
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+  
+        connection.query(
+            query,
+            [
+                titulo,
+                descripcion,
+                pileta ? "sí" : "no",
+                terraza ? "sí" : "no",
+                id_categoria || null,
+                id_condicion || null,
+                id_direccion || null
+            ],
+            (error, results) => {
+                if (error) {
+                    console.error("❌ Error al crear inmueble:", error);
+                    return res.status(500).json({ message: "Error al crear inmueble" });
+                }
+
+                res.status(201).json({
+                    id: results.insertId,
+                    message: "Inmueble creado exitosamente"
+                });
+            }
+        );
+    };
   
 
 
@@ -182,7 +178,7 @@ const editarInmueble = (req, res) => {
     const id = req.params.id;
     const { 
         titulo, descripcion, pileta, terraza,
-        id_categoria, id_autorizada, id_tipo_inmueble,
+        id_categoria, id_tipo_inmueble,
         id_ambiente, id_dormitorio, id_condicion,
         id_estacionamiento, id_direccion, id_cliente
     } = req.body;
@@ -190,7 +186,7 @@ const editarInmueble = (req, res) => {
     const query = `
         UPDATE Inmuebles SET
             titulo = ?, descripcion = ?, pileta = ?, terraza = ?,
-            id_categoria = ?, id_autorizada = ?, id_tipo_inmueble = ?,
+            id_categoria = ?, id_tipo_inmueble = ?,
             id_ambiente = ?, id_dormitorio = ?, id_condicion = ?,
             id_estacionamiento = ?, id_direccion = ?, id_cliente = ?
         WHERE id_inmueble = ?
@@ -198,7 +194,7 @@ const editarInmueble = (req, res) => {
 
     connection.query(query, [
         titulo, descripcion, pileta, terraza,
-        id_categoria, id_autorizada, id_tipo_inmueble,
+        id_categoria, id_tipo_inmueble,
         id_ambiente, id_dormitorio, id_condicion,
         id_estacionamiento, id_direccion, id_cliente,
         id
@@ -240,26 +236,7 @@ const eliminarInmueble = (req, res) => {
 
 
 
-// ---------------------------------------------------
-// 📌 INMUEBLES PUBLICADOS (estado = aprobada)
-// ---------------------------------------------------
-const mostrarInmueblesPublicados = (req, res) => {
-    const query = `
-        SELECT i.*, c.nombre AS categoria
-        FROM Inmuebles i
-        INNER JOIN Publicaciones p ON p.id_inmueble = i.id_inmueble
-        AND p.estado = 'aprobada'
-        LEFT JOIN Categorias c ON i.id_categoria = c.id_categoria
-    `;
-
-    connection.query(query, (error, results) => {
-        if (error) {
-            console.error("Error al obtener publicados:", error);
-            return res.status(500).json({ message: "Error al obtener publicados" });
-        }
-        res.json(results);
-    });
-};
+// Note: Approval/rejection and state (Autorizadas) are managed on Publicaciones
 
 
 
@@ -270,6 +247,5 @@ module.exports = {
     mostrarInmueble,
     crearInmueble,
     editarInmueble,
-    eliminarInmueble,
-    mostrarInmueblesPublicados
+    eliminarInmueble
 };

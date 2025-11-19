@@ -1,8 +1,100 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./HomePage.css";
+import * as API from "../Endpoints/endpoint";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: "", contrasena: "" });
+  const [loginError, setLoginError] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    setLoginError("");
+
+    try {
+      const res = await fetch(API.ENDPOINTS + API.URL_USUARIOS_LIST);
+      const usuarios = await res.json();
+
+      const usuarioEncontrado = usuarios.find(
+        (u) => u.email === loginForm.email && u.contrasena === loginForm.contrasena
+      );
+
+      if (!usuarioEncontrado) {
+        setLoginError("Usuario o contraseña incorrectos");
+        setLoginLoading(false);
+        return;
+      }
+
+      // Buscar datos de persona asociada
+      const resPersona = await fetch(`${API.ENDPOINTS}${API.URL_PERSONA_ID(usuarioEncontrado.id_persona)}`);
+      const persona = await resPersona.json();
+
+      // Buscar datos de dirección asociada a la persona
+      let direccion = {};
+      let provinciaId = "";
+      let departamentoId = "";
+      let municipioId = "";
+
+      if (persona.id_direccion) {
+        const resDireccion = await fetch(`${API.ENDPOINTS}${API.URL_DIRECCION_ID(persona.id_direccion)}`);
+        direccion = await resDireccion.json();
+        municipioId = direccion.id_municipio || "";
+      }
+
+      // Si tenemos municipioId, buscar departamento y provincia
+      if (municipioId) {
+        const resMunicipios = await fetch(API.ENDPOINTS + API.URL_MUNICIPIOS_LIST);
+        const municipios = await resMunicipios.json();
+        const municipioEncontrado = municipios.find(m => Number(m.id_municipio) === Number(municipioId));
+        
+        if (municipioEncontrado) {
+          departamentoId = municipioEncontrado.id_departamento || "";
+        }
+      }
+
+      // Si tenemos departamentoId, buscar provincia
+      if (departamentoId) {
+        const resDepartamentos = await fetch(API.ENDPOINTS + API.URL_DEPARTAMENTOS_LIST);
+        const departamentos = await resDepartamentos.json();
+        const departamentoEncontrado = departamentos.find(d => Number(d.id_departamento) === Number(departamentoId));
+        
+        if (departamentoEncontrado) {
+          provinciaId = departamentoEncontrado.id_provincia || "";
+        }
+      }
+
+      // Redirigir a RegistrarUsuario con datos precargados
+      navigate("/registro", {
+        state: {
+          email: usuarioEncontrado.email,
+          cuil: persona.cuil || "",
+          dni: persona.dni || "",
+          fecha_nacimiento: persona.fecha_nacimiento || "",
+          edad: persona.edad || "",
+          provincia: provinciaId,
+          departamento: departamentoId,
+          municipio: municipioId,
+          calle: direccion.calle || "",
+          numero: direccion.numero || "",
+          ubicacion: direccion.ubicacion || "",
+          observaciones: direccion.observaciones || "",
+          id_persona: usuarioEncontrado.id_persona,
+          id_usuario: usuarioEncontrado.id_usuario,
+          id_direccion: persona.id_direccion || null
+        }
+      });
+      setLoginLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoginError("Error al conectar con el servidor");
+      setLoginLoading(false);
+    }
+  };
+
   return (
     <div className="home">
 
@@ -15,8 +107,12 @@ const HomePage = () => {
             Admin
           </Link>
 
+          <button className="nav-btn" onClick={() => setShowLoginModal(true)}>
+            Ingresar
+          </button>
+
           <Link to="/registro" className="nav-btn">
-            Registro
+            Registrarme
           </Link>
         </div>
       </nav>
@@ -72,6 +168,37 @@ const HomePage = () => {
         © 2025 Inmobility — Todos los derechos reservados.
       </footer>
 
+      {/* MODAL LOGIN */}
+      {showLoginModal && (
+        <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowLoginModal(false)}>✕</button>
+            <h2>Ingresar</h2>
+
+            {loginError && <p className="error-message">{loginError}</p>}
+
+            <form onSubmit={handleLoginSubmit}>
+              <input
+                type="email"
+                placeholder="Email"
+                value={loginForm.email}
+                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                required
+              />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={loginForm.contrasena}
+                onChange={(e) => setLoginForm({ ...loginForm, contrasena: e.target.value })}
+                required
+              />
+              <button type="submit" disabled={loginLoading}>
+                {loginLoading ? "Cargando..." : "Ingresar"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

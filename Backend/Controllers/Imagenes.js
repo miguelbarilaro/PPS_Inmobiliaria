@@ -4,8 +4,20 @@ const { connection } = require("../Config/database");
    MOSTRAR TODAS LAS IMÁGENES
 =========================== */
 const mostrarImagenes = (req, res) => {
-  const query = "SELECT * FROM Imagenes";
-  connection.query(query, (err, results) => {
+  // Si viene id_publicacion en query, filtrar por él
+  const idPublicacion = req.query.id_publicacion;
+
+  let query = "SELECT * FROM Imagenes";
+  let params = [];
+
+  if (idPublicacion) {
+    query += " WHERE id_publicacion = ?";
+    params = [idPublicacion];
+  }
+
+  query += " ORDER BY orden ASC";
+
+  connection.query(query, params, (err, results) => {
     if (err) {
       console.error("Error al obtener imágenes:", err);
       return res.status(500).json({ message: "Error al obtener imágenes" });

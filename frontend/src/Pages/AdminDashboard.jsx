@@ -48,14 +48,16 @@ const AdminDashboard = () => {
     cargarInmuebles();
   }, []);
 
-  const aprobar = (id) => {
-    fetch(ENDPOINTS + URL_PUBLICACION_APROBAR(id), { method: "PATCH" })
-      .then(() => cargarPendientes());
+  const aprobar = (idPublicacion) => {
+    fetch(ENDPOINTS + URL_PUBLICACION_APROBAR(idPublicacion), { method: "PATCH" })
+      .then(() => cargarPendientes())
+      .catch(err => console.error('Error al aprobar publicación:', err));
   };
 
-  const rechazar = (id) => {
-    fetch(ENDPOINTS + URL_PUBLICACION_RECHAZAR(id), { method: "PATCH" })
-      .then(() => cargarPendientes());
+  const rechazar = (idPublicacion) => {
+    fetch(ENDPOINTS + URL_PUBLICACION_RECHAZAR(idPublicacion), { method: "DELETE" })
+      .then(() => cargarPendientes())
+      .catch(err => console.error('Error al rechazar publicación:', err));
   };
 
   return (
@@ -140,11 +142,11 @@ const AdminDashboard = () => {
                 {pendientes.map((p) => (
                   <tr key={p.id_publicacion}>
                     <td>{p.id_publicacion}</td>
-                    <td>{p.titulo_inmueble}</td>
-                    <td>{p.titulo}</td>
-                    <td>${p.precio}</td>
-                    <td>{p.categoria_inmueble}</td>
-                    <td>{p.tipo_inmueble}</td>
+                    <td>{p.titulo_inmueble || p.titulo || "—"}</td>
+                    <td>{p.titulo || "—"}</td>
+                    <td>${p.precio || "—"}</td>
+                    <td>{p.categoria_inmueble || "—"}</td>
+                    <td>{p.tipo_inmueble || "—"}</td>
 
                     <td className="actions-cell">
                       <button className="btn-preview" onClick={() => setPreviewData(p)}>Ver</button>
@@ -167,10 +169,10 @@ const AdminDashboard = () => {
           <div className="preview-window">
             <h2>{previewData.titulo}</h2>
 
-            <p><strong>Inmueble:</strong> {previewData.titulo_inmueble}</p>
-            <p><strong>Precio:</strong> ${previewData.precio}</p>
-            <p><strong>Categoría:</strong> {previewData.categoria_inmueble}</p>
-            <p><strong>Tipo:</strong> {previewData.tipo_inmueble}</p>
+            <p><strong>Precio:</strong> ${previewData.precio || "—"}</p>
+            <p><strong>Categoría:</strong> {previewData.categoria_inmueble || "—"}</p>
+            <p><strong>Tipo:</strong> {previewData.tipo_inmueble || "—"}</p>
+            <p><strong>Estado:</strong> {previewData.estado}</p>
 
             <div className="modal-actions">
               <button onClick={() => setPreviewData(null)}>Cerrar</button>

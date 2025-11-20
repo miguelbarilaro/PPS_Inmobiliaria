@@ -129,7 +129,8 @@ const mostrarInmueble = (req, res) => {
 const crearInmueble = (req, res) => {
         const { 
             titulo, descripcion, pileta, terraza, 
-            id_categoria, id_condicion, id_direccion
+            id_categoria, id_tipo_inmueble, id_ambiente, id_dormitorio,
+            id_condicion, id_estacionamiento, id_direccion
         } = req.body;
     
         if (!titulo || !descripcion) {
@@ -139,8 +140,9 @@ const crearInmueble = (req, res) => {
         const query = `
             INSERT INTO Inmuebles (
                 titulo, descripcion, pileta, terraza,
-                id_categoria, id_condicion, id_direccion
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                id_categoria, id_tipo_inmueble, id_ambiente, id_dormitorio,
+                id_condicion, id_estacionamiento, id_direccion
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
   
         connection.query(
@@ -151,7 +153,11 @@ const crearInmueble = (req, res) => {
                 pileta ? "sí" : "no",
                 terraza ? "sí" : "no",
                 id_categoria || null,
+                id_tipo_inmueble || null,
+                id_ambiente || null,
+                id_dormitorio || null,
                 id_condicion || null,
+                id_estacionamiento || null,
                 id_direccion || null
             ],
             (error, results) => {

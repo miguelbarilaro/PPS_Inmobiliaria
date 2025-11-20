@@ -5,6 +5,10 @@ import {
   ENDPOINTS,
   URL_PUBLICACIONES_APROBADAS,
   URL_CATEGORIAS_LIST,
+  URL_TIPOINMUEBLES_LIST,
+  URL_AMBIENTES_LIST,
+  URL_DORMITORIOS_LIST,
+  URL_CONDICIONES_LIST,
   URL_PROVINCIAS_LIST,
   URL_DEPARTAMENTOS_LIST,
   URL_MUNICIPIOS_LIST
@@ -20,12 +24,20 @@ const VerPropiedades = () => {
   const [loading, setLoading] = useState(true);
 
   const [categorias, setCategorias] = useState([]);
+  const [tiposInmuebles, setTiposInmuebles] = useState([]);
+  const [ambientes, setAmbientes] = useState([]);
+  const [dormitorios, setDormitorios] = useState([]);
+  const [condiciones, setCondiciones] = useState([]);
   const [provincias, setProvincias] = useState([]);
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
 
   const [filtros, setFiltros] = useState({
     categoria: "",
+    tipoInmueble: "",
+    ambiente: "",
+    dormitorio: "",
+    condicion: "",
     provincia: "",
     departamento: "",
     municipio: ""
@@ -52,7 +64,27 @@ const VerPropiedades = () => {
           filtered = filtered.filter(p => String(p.id_categoria) === String(filtros.categoria));
         }
 
-        // Filtrar por provincia (si está disponible en la propiedad)
+        // Filtrar por tipo de inmueble
+        if (filtros.tipoInmueble) {
+          filtered = filtered.filter(p => String(p.id_tipo_inmueble) === String(filtros.tipoInmueble));
+        }
+
+        // Filtrar por ambiente
+        if (filtros.ambiente) {
+          filtered = filtered.filter(p => String(p.id_ambiente) === String(filtros.ambiente));
+        }
+
+        // Filtrar por dormitorio
+        if (filtros.dormitorio) {
+          filtered = filtered.filter(p => String(p.id_dormitorio) === String(filtros.dormitorio));
+        }
+
+        // Filtrar por condición
+        if (filtros.condicion) {
+          filtered = filtered.filter(p => String(p.id_condicion) === String(filtros.condicion));
+        }
+
+        // Filtrar por provincia
         if (filtros.provincia) {
           filtered = filtered.filter(p => String(p.id_provincia) === String(filtros.provincia));
         }
@@ -79,11 +111,19 @@ const VerPropiedades = () => {
   useEffect(() => {
     Promise.all([
       fetch(`${ENDPOINTS}${URL_CATEGORIAS_LIST}`).then(r => r.json()),
+      fetch(`${ENDPOINTS}${URL_TIPOINMUEBLES_LIST}`).then(r => r.json()).catch(() => []),
+      fetch(`${ENDPOINTS}${URL_AMBIENTES_LIST}`).then(r => r.json()).catch(() => []),
+      fetch(`${ENDPOINTS}${URL_DORMITORIOS_LIST}`).then(r => r.json()).catch(() => []),
+      fetch(`${ENDPOINTS}${URL_CONDICIONES_LIST}`).then(r => r.json()).catch(() => []),
       fetch(`${ENDPOINTS}${URL_PROVINCIAS_LIST}`).then(r => r.json()),
       fetch(`${ENDPOINTS}${URL_DEPARTAMENTOS_LIST}`).then(r => r.json()),
       fetch(`${ENDPOINTS}${URL_MUNICIPIOS_LIST}`).then(r => r.json()),
-    ]).then(([cats, provs, deps, muns]) => {
+    ]).then(([cats, tipos, ambs, dorms, conds, provs, deps, muns]) => {
       setCategorias(cats);
+      setTiposInmuebles(tipos);
+      setAmbientes(ambs);
+      setDormitorios(dorms);
+      setCondiciones(conds);
       setProvincias(provs);
       setDepartamentos(deps);
       setMunicipios(muns);
@@ -123,7 +163,7 @@ const VerPropiedades = () => {
     <div className="ver-propiedades-container">
 
       {/* 🔥 BOTÓN VOLVER 🔥 */}
-      <button className="btn-volver" onClick={() => navigate(-1)}>
+      <button className="btn-volver" onClick={() => navigate('/')}>
         ← Volver
       </button>
 
@@ -136,6 +176,34 @@ const VerPropiedades = () => {
           <option value="">Todas las categorías</option>
           {categorias.map(c => (
             <option value={c.id_categoria} key={c.id_categoria}>{c.nombre}</option>
+          ))}
+        </select>
+
+        <select name="tipoInmueble" value={filtros.tipoInmueble} onChange={handleChange}>
+          <option value="">Todos los tipos</option>
+          {tiposInmuebles.map(t => (
+            <option value={t.id_tipo_inmueble} key={t.id_tipo_inmueble}>{t.tipo_inmueble}</option>
+          ))}
+        </select>
+
+        <select name="ambiente" value={filtros.ambiente} onChange={handleChange}>
+          <option value="">Todos los ambientes</option>
+          {ambientes.map(a => (
+            <option value={a.id_ambiente} key={a.id_ambiente}>{a.numero}</option>
+          ))}
+        </select>
+
+        <select name="dormitorio" value={filtros.dormitorio} onChange={handleChange}>
+          <option value="">Todos los dormitorios</option>
+          {dormitorios.map(d => (
+            <option value={d.id_dormitorio} key={d.id_dormitorio}>{d.numero}</option>
+          ))}
+        </select>
+
+        <select name="condicion" value={filtros.condicion} onChange={handleChange}>
+          <option value="">Todas las condiciones</option>
+          {condiciones.map(c => (
+            <option value={c.id_condicion} key={c.id_condicion}>{c.estado}</option>
           ))}
         </select>
 

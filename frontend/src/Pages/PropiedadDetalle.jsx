@@ -68,11 +68,38 @@ const PropiedadDetalle = () => {
 
       <div className="detalle-info">
         <p className="precio">${propiedad.precio}</p>
-        <p><strong>Descripción:</strong> {propiedad.descripcion}</p>
+        
+        {/* ========== DATOS DE LA PUBLICACIÓN ========== */}
+        <div className="seccion">
+          <h3>Información de la Publicación</h3>
+          <p><strong>Título:</strong> {propiedad.titulo}</p>
+          <p><strong>Descripción:</strong> {propiedad.descripcion_inmueble || propiedad.descripcion}</p>
+          <p><strong>Servicios:</strong> {propiedad.servicios || 'N/A'}</p>
+        </div>
 
-        <div className="caracteristicas">
-          <span>Ambientes: {propiedad.numero_ambientes ?? '-'}</span>
-          <span>Dormitorios: {propiedad.numero_dormitorios ?? '-'}</span>
+        {/* ========== CARACTERÍSTICAS DEL INMUEBLE ========== */}
+        <div className="seccion">
+          <h3>Características del Inmueble</h3>
+          <p><strong>Categoría:</strong> {propiedad.categoria_inmueble || 'N/A'}</p>
+          <p><strong>Tipo de Inmueble:</strong> {propiedad.tipo_inmueble || 'N/A'}</p>
+          <p><strong>Condición:</strong> {propiedad.condicion || 'N/A'}</p>
+          <p><strong>Ambientes:</strong> {propiedad.numero_ambientes || 'N/A'}</p>
+          <p><strong>Dormitorios:</strong> {propiedad.numero_dormitorios || 'N/A'}</p>
+          <p><strong>Estacionamiento:</strong> {propiedad.numero_estacionamiento || 'N/A'}</p>
+          <p><strong>Pileta:</strong> {propiedad.pileta && (propiedad.pileta === 'sí' || propiedad.pileta === 1) ? 'Sí' : 'No'}</p>
+          <p><strong>Terraza:</strong> {propiedad.terraza && (propiedad.terraza === 'sí' || propiedad.terraza === 1) ? 'Sí' : 'No'}</p>
+        </div>
+
+        {/* ========== UBICACIÓN ========== */}
+        <div className="seccion">
+          <h3>Ubicación</h3>
+          <p><strong>Provincia:</strong> {propiedad.provincia || 'N/A'}</p>
+          <p><strong>Departamento:</strong> {propiedad.departamento || 'N/A'}</p>
+          <p><strong>Municipio:</strong> {propiedad.municipio || 'N/A'}</p>
+          <p><strong>Calle:</strong> {propiedad.calle || 'N/A'}</p>
+          <p><strong>Número:</strong> {propiedad.numero_direccion || 'N/A'}</p>
+          <p><strong>Ubicación:</strong> {propiedad.ubicacion || 'N/A'}</p>
+          <p><strong>Observaciones:</strong> {propiedad.observaciones || 'N/A'}</p>
         </div>
       </div>
     </div>

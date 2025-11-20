@@ -87,6 +87,30 @@ INSERT INTO Categorias (nombre) VALUES
 ('Oficina'),
 ('Local Comercial');
 
+INSERT INTO Tipo_Inmuebles (tipo_inmueble)
+VALUES
+('Venta'),
+('Alquiler'),
+('Permuta'),
+('Venta/Alquiler'),
+('Indistinto');
+
+
+-- AMBIENTES (1 a 10)
+INSERT INTO Ambientes (numero)
+VALUES ('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10');
+
+-- DORMITORIOS (1 a 10)
+INSERT INTO Dormitorios (numero)
+VALUES ('1'), ('2'), ('3'), ('4'), ('5'), ('6'), ('7'), ('8'), ('9'), ('10');
+
+-- ESTACIONAMIENTOS (1 a 10) con entrada_exclusiva vacía (o NULL)
+INSERT INTO Estacionamientos (numero, entrada_exclusiva)
+VALUES 
+('1', NULL), ('2', NULL), ('3', NULL), ('4', NULL), ('5', NULL),
+('6', NULL), ('7', NULL), ('8', NULL), ('9', NULL), ('10', NULL);
+
+
 
 INSERT INTO Roles (nombre_rol) VALUES ('admin');
 

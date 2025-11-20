@@ -83,7 +83,32 @@
   color: #fff;
 }
 
-/* Botón volver coherente con otras vistas */
+/* Secciones de información */
+.detalle-info .seccion {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.detalle-info .seccion:first-of-type {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 0;
+}
+
+.detalle-info .seccion h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+}
+
+.detalle-info .seccion p {
+  font-size: 0.95rem;
+  margin: 8px 0;
+}
+
+/* Precio destacado */
 .btn-volver, .detalle-volver {
   position: absolute;
   top: 22px;

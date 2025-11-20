@@ -120,7 +120,7 @@ const HomePage = () => {
       {/* HERO SECTION */}
       <section className="hero">
         <div className="hero-box">
-          <h2>Encontrá tu próximo hogar</h2>
+          <h2>Encontrá tu próximo hogar o inversión</h2>
           <p>
             La plataforma inmobiliaria más confiable para publicar o buscar propiedades.
           </p>

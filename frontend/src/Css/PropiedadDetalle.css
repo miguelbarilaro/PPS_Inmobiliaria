@@ -1,229 +1,339 @@
-/* ============================
-   FONDO GENERAL (estilo similar a VerPropiedades)
-============================ */
-.detalle-container {
-  width: 100%;
-  min-height: 100vh;
-  padding: 40px 20px;
+/* =============================== */
+/* 🔥 FONDO GLOBAL DE TODA LA PÁGINA */
+/* =============================== */
 
-  /* Fondo con imagen + overlay oscuro y blur agradable */
-  background: url("https://images.unsplash.com/photo-1564013799919-ab600027ffc6") no-repeat center center/cover;
-  color: #f3f4f6;
-  font-family: "Inter", sans-serif;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 22px;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-/* Overlay sutil para oscurecer la imagen de fondo */
-.detalle-container::before {
+body {
+  background: transparent !important;
+  font-family: "Inter", sans-serif;
+}
+
+/* Fondo blur + oscuro */
+body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: rgba(2,6,23,0.55);
-  backdrop-filter: blur(6px);
-  z-index: -1;
+
+  background-image: url("https://images.unsplash.com/photo-1600585153931-2da6f7656237");
+  background-size: cover;
+  background-position: center;
+
+  filter: blur(7px) brightness(0.28);
+  z-index: -10;
 }
 
-/* TÍTULO */
-.detalle-container h1 {
-  width: 100%;
-  max-width: 1200px;
-  font-size: 2.6rem;
-  color: #ffffff;
-  font-weight: 700;
-  margin: 10px 0 6px 0;
-  text-shadow: 0 4px 18px rgba(0,0,0,0.6);
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+
+  background: linear-gradient(
+    130deg,
+    rgba(0,0,0,0.65),
+    rgba(20,20,35,0.55),
+    rgba(0,0,0,0.75)
+  );
+  z-index: -9;
 }
 
-/* Contenedor principal que aloja carrusel + tarjeta de info. Se usa el orden del DOM (h1, carrusel, .detalle-info). En pantallas grandes los ponemos en dos columnas. */
-.carousel-container,
-.detalle-info {
-  width: 100%;
-  max-width: 1200px;
+/* =============================== */
+/* 🎯 CONTENEDOR PRINCIPAL */
+/* =============================== */
+
+.detalle-container {
+  min-height: 100vh;
+  padding: 40px 20px 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: #f5f5f5;
+  background: transparent !important;
 }
 
-/* Estilos del carrusel grande */
-.carousel-container {
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 18px 40px rgba(2,6,23,0.6);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
-}
+/* =============================== */
+/* 🔙 BOTÓN VOLVER */
+/* =============================== */
 
-.carousel-container .carousel-item img {
-  width: 100%;
-  height: 520px;
-  object-fit: cover;
-  display: block;
-}
-
-/* Tarjeta de información con glassmorphism */
-.detalle-info {
-  margin-top: 18px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 22px 24px;
-  border-radius: 14px;
-  color: #f8fafc;
-  box-shadow: 0 12px 32px rgba(2,6,23,0.65);
-}
-
-.detalle-info p {
-  font-size: 1rem;
-  margin: 10px 0;
-  color: #e6eef8;
-}
-
-.detalle-info strong {
-  color: #fff;
-}
-
-/* Secciones de información */
-.detalle-info .seccion {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-}
-
-.detalle-info .seccion:first-of-type {
-  margin-top: 0;
-  border-top: none;
-  padding-top: 0;
-}
-
-.detalle-info .seccion h3 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0 0 10px 0;
-}
-
-.detalle-info .seccion p {
-  font-size: 0.95rem;
-  margin: 8px 0;
-}
-
-/* Precio destacado */
-.btn-volver, .detalle-volver {
-  position: absolute;
-  top: 22px;
-  left: 22px;
-  padding: 10px 16px;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.12);
-  color: white;
-  font-size: 0.95rem;
+.btn-volver {
+  align-self: flex-start;
+  margin-bottom: 15px;
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 10px;
+  backdrop-filter: blur(10px);
+  color: #fff;
   cursor: pointer;
-  z-index: 20;
+  transition: 0.2s ease;
 }
 
-.btn-volver:hover, .detalle-volver:hover {
-  background: rgba(255,255,255,0.14);
+.btn-volver:hover {
+  background: rgba(255, 255, 255, 0.18);
   transform: translateY(-2px);
 }
 
-/* LAYOUT: en pantallas grandes colocamos carrusel a la izquierda y la info a la derecha */
-@media (min-width: 992px) {
-  .carousel-container {
-    width: 65%;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 3%;
-  }
+/* =============================== */
+/* 🏷 TÍTULO */
+/* =============================== */
 
-  .detalle-info {
-    width: 32%;
-    display: inline-block;
-    vertical-align: top;
-    margin-top: 0;
-  }
-
-  .detalle-container h1 {
-    margin-left: 6px;
-  }
+h1 {
+  font-size: 2.1rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #fafafa;
+  letter-spacing: 0.5px;
 }
 
-/* RESPONSIVE: en pantallas pequeñas apilamos elementos */
-@media (max-width: 991px) {
-  .carousel-container .carousel-item img {
-    height: 320px;
-  }
+/* =============================== */
+/* 📸 CAROUSEL */
+/* =============================== */
 
-  .detalle-info {
-    width: 95%;
-    padding: 18px 16px;
-  }
-
-  .detalle-container h1 {
-    font-size: 1.8rem;
-  }
+/* Quitar fondo blanco del carrusel */
+.carousel,
+.carousel-inner,
+.carousel-item {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
 }
 
-/* Micro-interacciones */
-.detalle-info .precio {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 6px;
+.carousel-container {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 30px;
+
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 22px;
+
+  padding: 20px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
 }
 
-.detalle-info .caracteristicas {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 12px 0 6px 0;
-}
-
-.detalle-info .caracteristicas span {
-  background: rgba(255,255,255,0.04);
-  padding: 8px 10px;
-  border-radius: 10px;
-  font-size: 0.95rem;
-}
-
-/* Pequeño ajuste para que el carrusel tenga bordes redondeados visibles */
-.carousel-container .carousel-inner {
-  border-radius: 14px;
-}
-
-/* Fallbacks para imágenes que no existan */
-.carousel-container img[alt="foto"] {
-  background: linear-gradient(90deg,#e2e8f0,#c7d2fe);
-}
-
-/* Thumbnails debajo del carrusel */
-.thumbnails {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-  padding-bottom: 6px;
-  overflow-x: auto;
-}
-
-.thumbnail {
-  flex: 0 0 auto;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-.thumbnail img {
-  display: block;
-  width: 120px;
-  height: 72px;
+.carousel img {
+  height: 450px;
+  border-radius: 18px;
   object-fit: cover;
 }
 
-.thumbnail.selected {
-  border-color: rgba(124,185,238,0.9);
+/* =============================== */
+/* 🖼 MINIATURAS */
+/* =============================== */
+
+.thumbnails {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
 }
 
-  
+.thumbnail {
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: 0.25s ease;
+}
+
+.thumbnail.selected {
+  border-color: #ffb85c;
+  box-shadow: 0 0 12px rgba(255, 184, 92, 0.65);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 90px;
+  object-fit: cover;
+  transition: 0.25s ease;
+}
+
+.thumbnail:hover img {
+  transform: scale(1.05);
+}
+
+/* =============================== */
+/* 💲 PRECIO */
+/* =============================== */
+
+.precio {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 20px 0 30px;
+
+  background: linear-gradient(135deg, #ffffff, #ffe7ad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  text-align: center;
+}
+
+/* =============================== */
+/* 📑 SECCIONES DE INFO */
+/* =============================== */
+
+.detalle-info {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.seccion {
+  padding: 22px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.55),
+    inset 0 0 20px rgba(255, 255, 255, 0.03);
+}
+
+.seccion h3 {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffce8b;
+  margin-bottom: 12px;
+}
+
+.seccion p {
+  font-size: 0.96rem;
+  margin-bottom: 4px;
+  color: #e6e6e6;
+}
+
+.seccion strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* =============================== */
+/* 📱 RESPONSIVE */
+/* =============================== */
+
+@media (max-width: 600px) {
+  .carousel img {
+    height: 300px;
+  }
+
+  .precio {
+    font-size: 1.6rem;
+  }
+}
+
+/* =============================== */
+/* 🎨 NUEVO LAYOUT MÁS PROFESIONAL */
+/* =============================== */
+
+/* Centra el carrusel pero NO el precio */
+.carousel-container {
+  margin: 0 auto 30px auto;
+}
+
+/* TITULO ahora alineado a la izquierda */
+h1 {
+  text-align: left !important;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 15px auto;
+}
+
+/* PRECIO estilo "ficha técnica" */
+.precio {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
+
+  text-align: left !important;
+  font-size: 2.3rem;
+  font-weight: 700;
+
+  margin-top: 25px;
+  margin-bottom: 15px;
+
+  padding-left: 5px;
+}
+
+/* INFO: Tarjetas más rectas y profesionales */
+.detalle-info {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Secciones alineadas a la izquierda */
+.seccion {
+  text-align: left !important;
+  padding: 20px 24px;
+}
+
+/* Headers de secciones más formales */
+.seccion h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+
+/* Parrafos como un "detalle de ficha" */
+.seccion p {
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+/* =============================== */
+/* 📌 ORGANIZACIÓN DE DATOS TIPO FICHA */
+/* =============================== */
+
+/* Los strong se ven como etiquetas */
+.seccion strong {
+  color: #ffdca3;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* Layout 2 columnas solo en escritorio */
+@media (min-width: 800px) {
+  .seccion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+  }
+
+  .seccion p {
+    margin-bottom: 10px;
+  }
+
+  /* Primera línea del título más clara */
+  .seccion h3 {
+    grid-column: 1 / 3;
+  }
+}
+
+/* =============================== */
+/* ✨ Mejor separación visual */
+/* =============================== */
+
+.detalle-info .seccion {
+  margin-bottom: 22px;
+}
+
+.precio {
+  margin-bottom: 25px;
+}

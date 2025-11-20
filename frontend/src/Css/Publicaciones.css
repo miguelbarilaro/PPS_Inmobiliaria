@@ -1,231 +1,296 @@
-/* CONTENEDOR GENERAL */
+/* ======================================
+   FONDO GENERAL
+====================================== */
 .publi-container {
-    width: 100%;
-    min-height: 100vh;
-    padding: 30px 40px;
-    background: #0d0d0d;
-    color: #fff;
-    font-family: "Inter", sans-serif;
-  }
-  
-  /* TITULO */
-  .publi-title {
-    font-size: 2.3rem;
-    font-weight: 600;
-    margin-bottom: 25px;
-    color: #f0f0f0;
-  }
-  
-  /* TABLA */
-  .table-wrapper {
-    margin-bottom: 40px;
-    overflow-x: auto;
-  }
-  
-  .publi-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #1a1a1a;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  
-  .publi-table th {
-    background: #222;
-    padding: 14px;
-    color: #ddd;
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-  
-  .publi-table td {
-    padding: 14px;
-    border-top: 1px solid #333;
-    color: #ccc;
-  }
-  
-  .publi-table tr:hover {
-    background: #2a2a2a;
-  }
-  
-  /* BOTONES */
-  .actions {
-    display: flex;
-    gap: 8px;
-  }
-  
-  .btn-view {
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: #2980ff;
-    color: #fff;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.2s;
-  }
-  
-  .btn-view:hover {
-    background: #1f6ad8;
-  }
-  
-  .btn-edit {
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: #f1c40f;
-    color: #000;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  
-  .btn-edit:hover {
-    background: #d4aa0b;
-  }
-  
-  .btn-delete {
-    padding: 6px 12px;
-    border-radius: 8px;
-    background: #e74c3c;
-    color: #fff;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  
-  .btn-delete:hover {
-    background: #c0392b;
-  }
-  
-  /* FORMULARIO */
-  .form-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: #eee;
-  }
-  
-  .publi-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    max-width: 600px;
-    background: #151515;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
-  }
-  
-  .publi-form input,
-  .publi-form select {
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    background: #222;
-    color: #fff;
-    outline: none;
-    transition: 0.2s;
-  }
-  
-  .publi-form input:focus,
-  .publi-form select:focus {
-    border-color: #2980ff;
-  }
-  
-  .btn-submit {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: #27ae60;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .btn-submit:hover {
-    background: #1f8a4b;
-  }
-  
-  .btn-cancel {
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: #555;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .btn-cancel:hover {
-    background: #444;
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #0b0b0b;
+  font-family: "Inter", sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ======================================
+ BOTÓN VOLVER — FIJO ARRIBA A LA IZQUIERDA
+====================================== */
+.btn-volver {
+  position: fixed;
+  top: 25px;
+  left: 25px;
+
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.25);
+
+  cursor: pointer;
+  z-index: 9999;
+  backdrop-filter: blur(6px);
+  transition: 0.25s;
+}
+
+.btn-volver:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* ======================================
+ TÍTULOS
+====================================== */
+.publi-title,
+.form-title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+/* ======================================
+ TABLA — GLASS EFFECT
+====================================== */
+.table-wrapper {
+  width: 100%;
+  max-width: 1100px;
+
+  padding: 20px;
+  margin-bottom: 50px;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+
+  box-shadow: 0 0 25px rgba(0,0,0,0.45);
+  backdrop-filter: blur(12px);
+}
+
+.publi-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.publi-table th {
+  background: rgba(255,255,255,0.1);
+  padding: 14px;
+  color: #e6e6e6;
+  text-transform: uppercase;
+}
+
+.publi-table td {
+  padding: 14px;
+  color: #ddd;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.publi-table tr:hover {
+  background: rgba(255,255,255,0.06);
+}
+
+/* ======================================
+ ACCIÓN — BOTONES
+====================================== */
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-view, .btn-edit, .btn-delete {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-view { background: #2980ff; color: #fff; }
+.btn-edit { background: #f1c40f; color: #000; }
+.btn-delete { background: #e74c3c; color: #fff; }
+
+.btn-view:hover { background: #1f6ad8; }
+.btn-edit:hover { background: #d4aa0b; }
+.btn-delete:hover { background: #c0392b; }
+
+/* ======================================
+ FORMULARIO GLASS
+====================================== */
+.publi-form {
+  width: 100%;
+  max-width: 900px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 0 30px rgba(0,0,0,0.4);
+
+  padding: 35px;
+  border-radius: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+
+  backdrop-filter: blur(12px);
+}
+
+/* ======================================
+ FIELDSETS + GRID 2 COLUMNAS
+====================================== */
+.publi-form fieldset {
+  border: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 28px;
+}
+
+.publi-form legend {
+  grid-column: span 2;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffcf8b;
+}
+
+/* Textareas siempre ocupan 2 columnas */
+.publi-form textarea {
+  grid-column: span 2;
+  min-height: 120px;
+}
+
+/* ======================================
+ INPUTS / SELECTS
+====================================== */
+.publi-form input,
+.publi-form select,
+.publi-form textarea {
+  padding: 12px 14px;
+  background: rgba(20,20,20,0.7);
+  border: 1px solid rgba(255,255,255,0.18);
+
+  color: #fff;
+  border-radius: 12px;
+  font-size: 0.95rem;
+
+  transition: 0.25s;
+}
+
+.publi-form input::placeholder,
+.publi-form textarea::placeholder {
+  color: #bdbdbd;
+}
+
+.publi-form input:focus,
+.publi-form select:focus,
+.publi-form textarea:focus {
+  border-color: #2980ff;
+  background: rgba(40,40,40,0.9);
+  outline: none;
+}
+
+/* Checkboxes */
+.publi-form label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e6e6e6;
+  font-weight: 500;
+}
+
+.publi-form input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #ffbc66;
+}
+
+/* ======================================
+ BOTONES DEL FORMULARIO
+====================================== */
+.btn-submit {
+  padding: 12px;
+  background: #27ae60;
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background: #1f8a4b;
+}
+
+.btn-cancel {
+  padding: 12px;
+  background: #555;
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #444;
+}
+
+/* ======================================
+ IMÁGENES PREVIEW
+====================================== */
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.preview-item {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+
+  width: 28px;
+  height: 28px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.preview-delete:hover {
+  background: rgba(255,50,50,0.85);
+}
+
+/* ======================================
+ RESPONSIVE
+====================================== */
+@media (max-width: 700px) {
+  .publi-form fieldset {
+    grid-template-columns: 1fr;
   }
 
-/* PREVIEW DE IMÁGENES */
-.preview-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 15px 0;
-  }
-  
-  .preview-item {
-    width: 110px;
-    height: 110px;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  }
-  
-  .preview-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .publi-form legend {
+    grid-column: span 1;
   }
 
-  /* CONTENEDOR DE PREVIEW */
-.preview-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 15px 0;
+  .publi-form textarea {
+    grid-column: span 1;
   }
-  
-  .preview-item {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 0 12px rgba(0,0,0,0.4);
-  }
-  
-  .preview-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* BOTÓN ELIMINAR PREVIEW */
-  .preview-delete {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-  
-    background: rgba(0,0,0,0.55);
-    color: white;
-    border: none;
-    width: 26px;
-    height: 26px;
-  
-    font-size: 18px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.25s;
-  }
-  
-  .preview-delete:hover {
-    background: rgba(255,50,50,0.8);
-  }
-  
+}

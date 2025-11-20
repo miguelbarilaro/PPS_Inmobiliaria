@@ -82,11 +82,10 @@ const AdminDashboard = () => {
       <div className="admin-layout">
         
         {/* 🔵 SIDEBAR */}
-        <div className="admin-sidebar">
+          <div className="admin-sidebar">
           <h2>Menú</h2>
           <Link to="/admin">Dashboard</Link>
           <Link to="/admin/publicaciones">CRUD Publicaciones</Link>
-          <Link to="/admin/inmuebles">CRUD Inmuebles</Link>
           <Link to="/">Volver al Inicio</Link>
         </div>
 
@@ -150,6 +149,7 @@ const AdminDashboard = () => {
 
                     <td className="actions-cell">
                       <button className="btn-preview" onClick={() => setPreviewData(p)}>Ver</button>
+                      <button className="btn-edit" onClick={() => navigate(`/admin/publicaciones/editar/${p.id_publicacion}`)}>Editar</button>
                       <button className="btn-approve" onClick={() => aprobar(p.id_publicacion)}>Aprobar</button>
                       <button className="btn-reject" onClick={() => rechazar(p.id_publicacion)}>Rechazar</button>
                     </td>
@@ -176,6 +176,7 @@ const AdminDashboard = () => {
 
             <div className="modal-actions">
               <button onClick={() => setPreviewData(null)}>Cerrar</button>
+              <button onClick={() => { navigate(`/admin/publicaciones/editar/${previewData.id_publicacion}`); setPreviewData(null); }}>Editar</button>
             </div>
           </div>
         </div>

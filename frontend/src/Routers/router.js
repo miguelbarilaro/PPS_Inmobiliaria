@@ -17,6 +17,7 @@ import Personas from '../Components/Personas'
 import Propiedades from '../Components/Propiedades'
 import Provincias from '../Components/Provincias'
 import Publicaciones from '../Components/Publicaciones'
+import AdminEditarPublicacion from '../Pages/AdminEditarPublicacion'
 import Roles from '../Components/Roles'
 import Tipoinmuebles from '../Components/Tipoinmuebles'
 import Usuarios from '../Components/Usuarios'
@@ -71,13 +72,16 @@ export default function AppRouter() {
 				</header>
 
 				<main style={{ flex: 1, padding: 20 }}>
-					<Routes>
+				<Routes>
 						<Route path="/" element={<Home />} />
 						{routes
 							.filter((r) => r.element)
 							.map((r) => (
-								<Route key={r.path} path={r.path} element={r.element} />
-							))}
+									<Route key={r.path} path={r.path} element={r.element} />
+								))}
+
+						{/* Ruta administrativa para editar publicaciones (no aparece en el menú) */}
+						<Route path="/admin/publicaciones/editar/:id" element={<AdminEditarPublicacion />} />
 					</Routes>
 				</main>
 

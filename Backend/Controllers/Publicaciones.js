@@ -69,11 +69,36 @@ const mostrarPublicacion = (req, res) => {
             i.titulo AS titulo_inmueble, 
             i.descripcion AS descripcion_inmueble,
             c.nombre AS categoria_inmueble, 
-            ti.tipo_inmueble
+            ti.tipo_inmueble,
+            am.numero AS numero_ambientes,
+            d.numero AS numero_dormitorios,
+            con.estado AS condicion,
+            e.numero AS numero_estacionamiento,
+            e.entrada_exclusiva,
+            i.pileta,
+            i.terraza,
+            dir.calle,
+            dir.numero AS numero_direccion,
+            dir.ubicacion,
+            dir.observaciones,
+            mun.id_municipio,
+            mun.nombre AS municipio,
+            dep.id_departamento,
+            dep.nombre AS departamento,
+            prov.id_provincia,
+            prov.nombre AS provincia
         FROM Publicaciones p
         LEFT JOIN Inmuebles i ON p.id_inmueble = i.id_inmueble
         LEFT JOIN Categorias c ON i.id_categoria = c.id_categoria
         LEFT JOIN Tipo_Inmuebles ti ON i.id_tipo_inmueble = ti.id_tipo_inmueble
+        LEFT JOIN Ambientes am ON i.id_ambiente = am.id_ambiente
+        LEFT JOIN Dormitorios d ON i.id_dormitorio = d.id_dormitorio
+        LEFT JOIN Condiciones con ON i.id_condicion = con.id_condicion
+        LEFT JOIN Estacionamientos e ON i.id_estacionamiento = e.id_estacionamiento
+        LEFT JOIN Direcciones dir ON i.id_direccion = dir.id_direccion
+        LEFT JOIN Municipios mun ON dir.id_municipio = mun.id_municipio
+        LEFT JOIN Departamentos dep ON mun.id_departamento = dep.id_departamento
+        LEFT JOIN Provincias prov ON dep.id_provincia = prov.id_provincia
         WHERE p.id_publicacion = ?
     `;
     
